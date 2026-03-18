@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Sarathi-Master-Control-v1
-          path: bin/*.apk
+         path: bin/*.apk
