@@ -19,10 +19,10 @@ jobs:
 
       - name: Build APK with Buildozer
         run: |
-          # 'yes' कमांड के साथ पाइपिंग की जगह, हम बिल्डोजर को सीधे एग्रीमेंट स्वीकार करने के लिए कहेंगे
-          buildozer -v android debug || (echo "Build failed, retrying..." && buildozer -v android debug)
+          # पुराना कचरा साफ़ करके नए सिरे से (Debug Level 2 के साथ) बिल्ड करेंगे
+          buildozer -v android clean
+          buildozer -v android debug
         env:
-          # यहाँ हम लाइसेंस को पहले ही स्वीकार कर रहे हैं ताकि पाइप न टूटे
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload APK Artifact
@@ -30,5 +30,6 @@ jobs:
         with:
           name: Sarathi-App
           path: bin/*.apk
+
 
 
