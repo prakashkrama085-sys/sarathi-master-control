@@ -1,14 +1,10 @@
 name: Sarathi APK Builder
-run-name: ${{ github.actor }} is building Sarathi APK 🔱
 on: [push, workflow_dispatch]
-
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -18,13 +14,15 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip install buildozer cython
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.33
 
       - name: Build APK with Buildozer
-        run: yes | buildozer -v android debug
-
+        run: |
+          yes | buildozer -v android debug
+        
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Sarathi-Master-Control
+          name: Sarathi-App
           path: bin/*.apk
