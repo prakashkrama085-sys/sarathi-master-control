@@ -13,19 +13,22 @@ jobs:
       - name: Install Buildozer Dependencies
         run: |
           sudo apt update
-          # libtinfo5 को हटाकर libtinfo6 और अन्य ज़रूरी लाइब्रेरीज़ डाली गई हैं
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade pip
           pip install buildozer cython==0.29.33
 
       - name: Build APK with Buildozer
         run: |
-          # यह कमांड अपने आप सारे एग्रीमेंट्स स्वीकार कर लेगा
-          yes | buildozer -v android debug
-        
+          # 'yes' कमांड के साथ पाइपिंग की जगह, हम बिल्डोजर को सीधे एग्रीमेंट स्वीकार करने के लिए कहेंगे
+          buildozer -v android debug || (echo "Build failed, retrying..." && buildozer -v android debug)
+        env:
+          # यहाँ हम लाइसेंस को पहले ही स्वीकार कर रहे हैं ताकि पाइप न टूटे
+          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Sarathi-App
           path: bin/*.apk
+
 
